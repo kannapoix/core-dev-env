@@ -8,15 +8,21 @@
 
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        ./scripts.nix
+      ];
       systems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin"];
       perSystem = {
         config,
         self',
         inputs',
         pkgs,
+        lib,
         system,
         ...
-      }: {
+      }: let
+        devScripts = lib.filterAttrs (name: _: lib.hasPrefix "dev-" name) config.packages;
+      in {
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
             cmake
@@ -41,7 +47,7 @@
             lcov
           ];
 
-          packages = [
+          packages = (builtins.attrValues devScripts) ++ [
             pkgs.cargo
             pkgs.rustc
           ];
