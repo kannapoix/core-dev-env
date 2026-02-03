@@ -1,0 +1,20 @@
+# Bitcoin Core development specific git config
+
+[remote "upstream-pull"]
+    fetch = +refs/pull/*/head:refs/remotes/upstream-pull/*
+    url = git@github.com:bitcoin/bitcoin.git
+[alias]
+    # Fetch a pull request from upstream
+    # Usage: git pr 12345
+    fpr = "!f() { git fetch upstream pull/$1/head:pr-$1; }; f"
+
+    # Update a Pull Request branch, even after a force push, and even if checked out, with `git pru 12345`
+    pru = "!f() { git fetch --update-head-ok --force upstream-pull pull/$1/head:pr-$1 && git reset --hard upstream-pull/$1; }; f";
+    
+    sync = !git fetch upstream && git rebase upstream/master
+    
+[diff]
+    # Better diff algorithm for C++ code review
+    algorithm = patience
+    compactionHeuristic = true
+    
