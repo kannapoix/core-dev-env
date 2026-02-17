@@ -1,0 +1,72 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Coverage: Run Tests",
+            "type": "shell",
+            "command": "LLVM_PROFILE_FILE=\"$(pwd)/build-coverage/raw_profile_data/%m_%p.profraw\" ctest --test-dir build-coverage --parallel 12",
+            "options": {
+                "cwd": "${userHome}/${input:workingDirectory}"
+            },
+            "dependsOn": "Coverage: Create Profile Dir",
+            "problemMatcher": []
+        },
+        {
+            "label": "Coverage: Create Profile Dir",
+            "type": "shell",
+            "command": "echo ${cwd} && echo $(pwd) && mkdir -p build-coverage/raw_profile_data",
+            "options": {
+                "cwd": "${userHome}/${input:workingDirectory}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Coverage: Merge Profile Data",
+            "type": "shell",
+            "command": "find build-coverage/raw_profile_data -name \"*.profraw\" | xargs llvm-profdata merge -o build-coverage/coverage.profdata",
+            "options": {
+                "cwd": "${userHome}/${input:workingDirectory}"
+            },
+            "dependsOn": "Coverage: Run Tests",
+            "problemMatcher": []
+        },
+        {
+            "label": "Coverage: Generate Report",
+            "type": "shell",
+            "command": "llvm-cov show --object=build-coverage/bin/test_bitcoin --object=build-coverage/bin/bitcoind -Xdemangler=llvm-cxxfilt --instr-profile=build-coverage/coverage.profdata --format=html --output-dir=build-coverage/coverage_report --show-branches=count",
+            "options": {
+                "cwd": "${userHome}/${input:workingDirectory}"
+            },
+            "dependsOn": "Coverage: Merge Profile Data",
+            "problemMatcher": []
+        },
+        {
+            "label": "Coverage: Full Pipeline",
+            "dependsOn": "Coverage: Generate Report",
+            "dependsOrder": "sequence",
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "workingDirectory",
+            "type": "pickString",
+            "description": "Select working directory",
+            "options": [
+                {
+                    "label": "bitcoin",
+                    "value": "${workspaceFolderBasename:bitcoin}"
+                },
+                {
+                    "label": "bitcoin-taproot-tests",
+                    "value": "${workspaceFolderBasename:bitcoin-taproot-tests}"
+                }
+            ],
+            "default": "${workspaceFolderBasename:bitcoin}"
+        }
+    ]
+}

@@ -12,8 +12,7 @@ fi
 
 git worktree add "$WORKTREE_DIR" "$BRANCH_NAME"
 
-#TODO: Do not use fixed repository name
-ln --symbolic --force ~/core-dev-env/.envrc "$WORKTREE_DIR/.envrc"
+ln --symbolic --force ../.envrc "$WORKTREE_DIR/.envrc"
 
 cd "$WORKTREE_DIR" || exit
 direnv allow

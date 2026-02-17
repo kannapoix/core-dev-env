@@ -51,6 +51,18 @@
             pkgs.cargo
             pkgs.rustc
           ];
+
+          shellHook = ''
+            # Auto-link .envrc if in a directory where ../core-dev-env/.envrc exists
+            if [ ! -L .envrc ] && [ -f ../core-dev-env/.envrc ]; then
+              ln -sf ../core-dev-env/.envrc .envrc
+            fi
+
+            # Auto-link .vscode if in a directory where ../core-dev-env/vscode exists
+            if [ ! -L .vscode ] && [ ! -d .vscode ] && [ -d ../core-dev-env/vscode ]; then
+              ln -sf ../core-dev-env/vscode .vscode
+            fi
+          '';
         };
       };
     };
