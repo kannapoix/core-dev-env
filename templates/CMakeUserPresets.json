@@ -1,0 +1,25 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "coverage",
+            "displayName": "Coverage (LLVM)",
+            "binaryDir": "${sourceDir}/build-coverage",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "APPEND_CFLAGS": "-fprofile-instr-generate -fcoverage-mapping",
+                "APPEND_CXXFLAGS": "-fprofile-instr-generate -fcoverage-mapping",
+                "APPEND_LDFLAGS": "-fprofile-instr-generate -fcoverage-mapping"
+            }
+        }
+    ]
+}

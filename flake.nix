@@ -47,20 +47,27 @@
             lcov
           ];
 
-          packages = (builtins.attrValues devScripts) ++ [
-            pkgs.cargo
-            pkgs.rustc
-          ];
+          packages =
+            (builtins.attrValues devScripts)
+            ++ [
+              pkgs.cargo
+              pkgs.rustc
+            ];
 
           shellHook = ''
-            # Auto-link .envrc if in a directory where ../core-dev-env/.envrc exists
-            if [ ! -L .envrc ] && [ -f ../core-dev-env/.envrc ]; then
-              ln -sf ../core-dev-env/.envrc .envrc
+            # Auto-link .envrc if in a directory where ../core-dev-env/templates/.envrc exists
+            if [ ! -L .envrc ] && [ -f ../core-dev-env/templates/.envrc ]; then
+              ln -sf ../core-dev-env/templates/.envrc .envrc
             fi
 
-            # Auto-link .vscode if in a directory where ../core-dev-env/vscode exists
-            if [ ! -L .vscode ] && [ ! -d .vscode ] && [ -d ../core-dev-env/vscode ]; then
-              ln -sf ../core-dev-env/vscode .vscode
+            # Auto-link .vscode if in a directory where ../core-dev-env/templates/vscode exists
+            if [ ! -L .vscode ] && [ ! -d .vscode ] && [ -d ../core-dev-env/templates/vscode ]; then
+              ln -sf ../core-dev-env/templates/vscode .vscode
+            fi
+
+            # Auto-link CMakeUserPresets.json if in a directory where ../core-dev-env/templates/CMakeUserPresets.json exists
+            if [ ! -L CMakeUserPresets.json ] && [ -f ../core-dev-env/templates/CMakeUserPresets.json ]; then
+              ln -sf ../core-dev-env/templates/CMakeUserPresets.json CMakeUserPresets.json
             fi
           '';
         };

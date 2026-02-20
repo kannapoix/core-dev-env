@@ -14,6 +14,6 @@ nix registry add core-env $PWD
 Reference the registry from direnv by creating a symlink to `.envrc` in your Bitcoin Core repository:
 ```shell
 cd bitcoin
-ln -s ~/core-dev-env/.envrc .envrc
+ln -sf ~/core-dev-env/templates/.envrc .envrc
 direnv allow
 ```
