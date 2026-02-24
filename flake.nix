@@ -69,6 +69,10 @@
             if [ ! -L CMakeUserPresets.json ] && [ -f ../core-dev-env/templates/CMakeUserPresets.json ]; then
               ln -sf ../core-dev-env/templates/CMakeUserPresets.json CMakeUserPresets.json
             fi
+
+            if [ ! -L .gitconfig.local ] && [ -f ../core-dev-env/templates/.gitconfig.local ]; then
+              ln -sf ../core-dev-env/templates/.gitconfig.local .gitconfig.local
+            fi
           '';
         };
       };
