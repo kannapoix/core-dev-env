@@ -26,22 +26,27 @@
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
             cmake
-            boost
-            libevent
-            sqlite
             pkgconf
-            capnproto
+            gcc
+            libllvm
           ];
 
           buildInputs = with pkgs; [
-            libllvm
-            gcc
+            boost
+            libevent
+            sqlite
+            capnproto
+            zeromq
+            qrencode
+            imagemagick
+            kdePackages.qtbase
+            kdePackages.qttools
+
             python312Packages.pyzmq
             python312Packages.pycapnp
 
             # Required by signet getcoins.py
             python312Packages.requests
-            imagemagick
 
             # For test coverage
             lcov
